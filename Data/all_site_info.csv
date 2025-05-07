@@ -1,0 +1,112 @@
+MonitoringLocationIdentifier,MonitoringLocationName,MonitoringLocationTypeName,LatitudeMeasure,LongitudeMeasure,Description,County,StationDate,Ecoregion,HUC_8,Plan_Seg,Reach_Disc,Reach,AU,Area_Acres,Hectares,AreaSqKm
+LARK001A,Conway,Lake/Reservoir,34.9617,-92.3972,"Lake Conway - lower, near spillway.",Faulkner,10/21/1989,Arkansas Valley,11110203,3F,lower,4061,AR_11110203_4061,1876,759.1375352,7.591375352
+LARK004A,Brewer,Lake/Reservoir,35.231,-92.596783,Brewer Lake - midpoint between steep shoreline & spillway.,Conway,10/21/1989,Arkansas Valley,11110205,3D,lower,4011,AR_11110205_4011,819,331.4284851,3.314284851
+LARK005A,Overcup,Lake/Reservoir,35.1967,-92.7303,Overcup Lake - close to midpoint of dam.,Conway,10/21/1989,Arkansas Valley,11110203,3F,whole lake,4030,AR_11110203_4030,805,325.6052874,3.256052874
+LARK006A,Beaverfork,Lake/Reservoir,35.137,-92.4386,Beaverfork Lake - north of Conway - midway from boat launch,Faulkner,10/21/1989,Arkansas Valley,11110205,3D,whole lake,4020,AR_11110205_4020,722,292.3746979,2.923746979
+LARK008A,Fort Smith,Lake/Reservoir,35.6603,-94.1461,Fort Smith - about 150 yards up from dam.,Crawford,10/21/1989,Boston Mountains,11110201,3H,lower,4071,AR_11110201_4071,907,367.1206713,3.671206708
+LARK008B,Fort Smith,Lake/Reservoir,35.7096,-94.0999,Lake Fort Smith - upper site,Crawford,3/1/2001,Boston Mountains,11110201,3H,upper,4070,AR_11110201_4070,406,164.1763398,1.6417634
+LARK011A,Sugar Loaf,Lake/Reservoir,35.0942,-94.3962,Sugar Loaf Lake - narrow neck in front of dam.,Sebastian,10/21/1989,Arkansas Valley,11110105,3I,whole lake,4020,AR_11110105_4020,291,117.8971105,1.178971105
+LARK012A,Budd (Bobb) Kidd,Lake/Reservoir,35.9694,-94.3542,"Budd Kidd Lake - W. of Prairie Grove, midpoint of dam",Washington,10/21/1989,Ozark Highlands,11110103,3J,whole lake,4030,AR_11110103_4030,193,78.21627745,0.782162775
+LARK013A,Cove,Lake/Reservoir,35.2319,-93.6281,Cove Lake - pt. on trans. parallel to dam closer to R. shore,Logan,10/21/1990,Arkansas Valley,11110202,3H,whole lake,4030,AR_11110202_4030,126,50.97115516,0.509711552
+LARK014A,Elmdale,Lake/Reservoir,36.1961,-94.2169,Lake Elmdale - Southeast of Elm Springs AR.,Washington,10/21/1989,Ozark Highlands,11110103,3J,whole lake,4040,AR_11110103_4040,146,59.28591779,0.592859178
+LARK015A,Fayetteville,Lake/Reservoir,36.1339,-94.1371,Lake Fayetteville - W. of spillway above boat docks.,Washington,10/21/1989,Ozark Highlands,11110103,3J,whole lake,4080,AR_11110103_4080,171,69.3898375,0.693898375
+LARK016A,Spring,Lake/Reservoir,35.1501,-93.4258,Spring Lake - pt. on Trans. parallel to dam.,Yell,10/21/1989,Arkansas Valley,11110204,3G,whole lake,4070,AR_11110204_4070,81,32.91354383,0.329135438
+LARK017A,Horsehead,Lake/Reservoir,35.5589,-93.6342,Horsehead Lake - 150 yards up from dam.,Johnson,10/21/1989,Arkansas Valley,11110202,3H,whole lake,4050,AR_11110202_4050,109,44.06149369,0.440614937
+LARK018A,Weddington,Lake/Reservoir,36.0911,-94.3664,Lake Weddington - pt. on trans. parallel to dam.,Washington,10/21/1989,Ozark Highlands,11110103,3J,whole lake,4020,AR_11110103_4020,86,34.87113889,0.348711389
+LARK020A,Shores,Lake/Reservoir,35.635,-93.9619,Shores Lake - 100 yrds from dam.,Franklin,10/21/1989,Boston Mountains,11110201,3H,whole lake,4040,AR_11110201_4040,72,29.01125844,0.290112584
+LARK021A,Maumelle,Lake/Reservoir,34.8594,-92.4975,Lake Maumelle - lower between dam and buoy line.,Pulaski,10/21/1989,Arkansas Valley,11110207,3C,lower,4072,AR_11110207_4072,2909,1177.236517,11.77236517
+LARK021B,Maumelle,Lake/Reservoir,34.8822,-92.6336,Lake Maumelle - upper end,Pulaski,10/21/1989,Arkansas Valley,11110207,3C,mid,4071,AR_11110207_4071,5936,2402.311168,24.02311168
+LARK022A,Hinkle,Lake/Reservoir,34.8542,-94.2542,Lake Hinkle - near midpoint of dam.,Scott,10/21/1989,Arkansas Valley,11110105,3I,whole lake,4040,AR_11110105_4040,969,392.2209212,3.922209212
+LARK024A,Lee Creek,Lake/Reservoir,35.4848,-94.3943,Lee Creek Lake near the dam.,Crawford,7/16/1994,Arkansas Valley,11110104,3H,whole lake,4020,AR_11110104_4020,582,235.3788866,2.353788866
+LARK025A,Pickthorne,Lake/Reservoir,34.9161,-92.0625,Pickthorne Lake along eastern most levee.,Lonoke,7/16/1994,Mississippi Alluvial Plain,08020402,3B,whole lake,4010,AR_08020402_4010,325,131.6740861,1.316740861
+LARK026A,Pine Bluff (Saracen),Lake/Reservoir,34.2375,-92.0042,Lake Pine Bluff diagonally from north and east levees,Jefferson,7/16/1994,Mississippi Alluvial Plain,11110207,3C,whole lake,4010,AR_11110207_4010,467,188.9464495,1.889464495
+LARK028A,Blue Mountain,Lake/Reservoir,35.1042,-93.6503,Blue Mountain Lake near Dam,Yell,1/1/1999,Arkansas Valley,11110204,3G,lower,4061,AR_11110204_4061,1852,749.2937558,7.492937558
+LARK028B,Blue Mountain,Lake/Reservoir,35.1022,-93.7202,Blue Mountain Lake near Ashley Creek Park,Logan,1/1/1999,Arkansas Valley,11110204,3G,upper,4060,AR_11110204_4060,1120,453.3589642,4.533589642
+LARK030A,Nimrod,Lake/Reservoir,34.9531,-93.162,Lake Nimrod near Dam,Perry,1/1/1999,Arkansas Valley,11110206,3E,lower,4052,AR_11110206_4052,1370,554.4732286,5.544732284
+LARK030B,Nimrod,Lake/Reservoir,34.9502,-93.2272,Lake Nimrod - upper site,Yell,1/1/1999,Arkansas Valley,11110206,3E,mid,4051,AR_11110206_4051,772,312.3747272,3.123747273
+LARK038,Siloam Springs,Lake/Reservoir,36.2241,-94.5413,Siloam Springs Lake,Benton,7/25/2012,Ozark Highlands,11110103,3J,whole lake,4010,AR_11110103_4010,55,22.20511727,0.222051173
+LARK039,Lincoln,Lake/Reservoir,36.0031,-94.4194,Lincoln Lake,Washington,7/25/2012,Ozark Highlands,11110103,3J,whole lake,4050,AR_11110103_4050,85,34.40506894,0.344050689
+LARK041,Driver Creek,Lake/Reservoir,35.4667,-92.7303,Driver Creek Lake,Van Buren,7/25/2012,Boston Mountains,11110203,3F,whole lake,4020,AR_11110203_4020,28,11.43765037,0.114376504
+LARK042,Bennett,Lake/Reservoir,35.2828,-92.2849,Bennett Lake,NA,12/19/2005,Arkansas Valley,11110205,#D,whole lake,4030,AR_11110205_4030,32,13.137,0.131
+LMIS002A,Poinsett,Lake/Reservoir,35.5253,-90.6753,Lake Poinsett - close to midpoint of dam.,Poinsett,10/21/1989,Mississippi Alluvial Plain,08020203,5A,whole lake,4040,AR_08020203_4040,338,136.714158,1.36714158
+LMIS008A,Austell,Lake/Reservoir,35.1539,-90.7198,Lake Austelle near Dam,Cross,10/16/2009,Mississippi Alluvial Plain,08020203,5A,whole lake,4030,AR_08020203_4030,60,24.28443743,0.242844374
+LNEO001A,Crystal,Lake/Reservoir,36.3439,-94.4428,Crystal Lake - 1 mi. N of Decatur just S. of boat ramp.,Benton,10/21/1989,Ozark Highlands,11070209,3J,whole lake,4010,AR_11070209_4010,38,15.51502843,0.155150284
+LOUA002A,Felsenthal,Lake/Reservoir,33.0694,-92.1281,Felsenthal Lake - lower in main river channel to lock.,Union,10/21/1989,South Central Plains,08040202,2D,multiple connected lakes,4170,AR_08040202_4170,610,246.8830078,2.468830078
+LOUA002B,Felsenthal,Lake/Reservoir,33.1506,-92.1083,Felsenthal Lake - upper at Highway 82 bridge,Ashley,10/21/1989,South Central Plains,08040202,2D,whole lake,4100,AR_08040202_4100,64,25.89860011,0.258986001
+LOUA004A,Cane Creek,Lake/Reservoir,33.9239,-91.7483,"Cane Creek Lake - E. of Star City, line spillway to levee.",Lincoln,10/21/1989,South Central Plains,08040205,2B,whole lake,4030,AR_08040205_4030,1734,701.5588894,7.015588894
+LOUA005A,White Oak,Lake/Reservoir,33.6956,-93.0841,Lower White Oak Lake - pt. fm. mouth to St. Park Bay.,Ouachita,10/21/1990,South Central Plains,08040103,2G,lower,4010,AR_08040103_4010,1044,422.4254663,4.224254663
+LOUA006A,Georgia-Pacific,Lake/Reservoir,33.2411,-92.0417,Lake Georgia-Pacific - pt. trans. fm. channel to pump sta.,Ashley,10/21/1989,South Central Plains,08040204,2C,whole lake,4010,AR_08040204_4010,1559,630.88934,6.3088934
+LOUA007A,Wilson Brake,Lake/Reservoir,33.2197,-91.5253,Lake Wilson - southwest of Portland,Ashley,10/21/1989,Mississippi Alluvial Plain,08040205,2B,whole lake,4010,AR_08040205_4010,148,59.76749722,0.597674972
+LOUA008A,Grampus,Lake/Reservoir,33.3136,-91.5506,Lake Grampus - NW of Montrose - 1/4 mi S. of ramp.,Ashley,10/21/1989,Mississippi Alluvial Plain,08040205,2B,whole lake,4020,AR_08040205_4020,335,135.3961982,1.353961982
+LOUA010A,Wallace,Lake/Reservoir,33.4789,-91.4536,"Lake Wallace - S of Dermott, mid lake N. of boat ramp.",Chicot,10/21/1989,Mississippi Alluvial Plain,08040205,2B,whole lake,4040,AR_08040205_4040,321,129.8343263,1.298343263
+LOUA011A,Winona,Lake/Reservoir,34.7986,-92.8475,Lake Winona -,Saline,10/21/1989,Ouachita Mountains,08040203,2C,lower,4101,AR_08040203_4101,843,341.1748751,3.411748751
+LOUA016A,Catherine,Lake/Reservoir,34.4275,-92.9017,"Lake Catherine - lower,1st inlet upstream frm launch.",Hot Spring,10/21/1989,Ouachita Mountains,08040101,2F,lower,4055,AR_08040101_4055,404,163.5498084,1.635498087
+LOUA016C,Catherine,Lake/Reservoir,34.4427,-93.0208,Lake Catherine at Handicap Fishing Pier below Carpenter Dam,Garland,1/18/2011,Ouachita Mountains,08040101,2F,upper,4050,AR_08040101_4050,336,135.9233192,1.359233188
+LOUA017A,Greeson,Lake/Reservoir,34.1493,-93.7161,Lake Greeson - narrow pt. below ramp at Daisey State Park.,Pike,10/21/1989,Ouachita Mountains,08040103,2G,lower,4031,AR_08040103_4031,3098,1253.914531,12.53914531
+LOUA017B,Greeson,Lake/Reservoir,34.2244,-93.7447,Lake Greeson - upper site,Pike,1/1/1999,Ouachita Mountains,08040103,2G,upper,4030,AR_08040103_4030,3987,1613.534413,16.13534413
+LOUA018A,Hamilton,Lake/Reservoir,34.4392,-93.0347,"Lake Hamilton - Lower,pt. below island straight across.",Garland,10/21/1989,Ouachita Mountains,08040101,2F,lower,4021,AR_08040101_4021,3492,1413.01325,14.1301325
+LOUA018B,Hamilton,Lake/Reservoir,34.4675,-93.1228,Lake Hamilton - upper between 2 pts. below bridge.,Garland,10/21/1989,Ouachita Mountains,08040101,2F,upper,4020,AR_08040101_4020,2862,1158.205225,12.8532502
+LOUA019A,DeGray,Lake/Reservoir,34.2173,-93.1183,Degray Lake near dam,Clark,10/21/1989,Ouachita Mountains,08040102,2F,lower,4041,AR_08040102_4041,9299,3763.050521,37.63050521
+LOUA019B,DeGray,Lake/Reservoir,34.2767,-93.2958,Degray Lake - upstream of pt. Cedar Launch to picnic area.,Clark,10/21/1989,Ouachita Mountains,08040102,2F,upper,4040,AR_08040102_4040,2222,899.2378187,8.992378187
+LOUA020A,Ouachita,Lake/Reservoir,34.5733,-93.2028,Lake Ouachita in the narrows above dam.,Garland,7/16/1994,Ouachita Mountains,08040101,2F,lower (trout waters),4063,AR_08040101_4063,3244,1312.994359,13.12994359
+LOUA020C,Ouachita,Lake/Reservoir,34.5978,-93.3997,"Lake Ouachita - upper, Housley Point to island.",Garland,10/21/1989,Ouachita Mountains,08040101,2F,mid (trout waters),4062,AR_08040101_4062,24695,9993.602715,99.93602715
+LOUA022A,Monticello,Lake/Reservoir,33.7017,-91.8527,Lake Monticello near dam,Drew,7/6/2004,South Central Plains,08040204,2C,whole lake,4020,AR_08040204_4020,1476,597.1759986,5.971759986
+LOUA025A,Norrell,Lake/Reservoir,34.7171,-92.6429,Norrell Lake,NA,11/6/2002,Ouachita Mountains,08040203,2C,whole lake,4070,AR_08040203_4070,270,109.2887,1.092887
+LOUA026A,Bragg,Lake/Reservoir,33.6501,-92.9608,Bragg Lake,NA,11/27/2002,South Central Plains,08040102,2F,whole lake,4010,AR_08040102_4010,172,69.62,0.6962
+LRED002A,Columbia,Lake/Reservoir,33.2889,-93.3967,"Lake Columbia - lower,W. of Magnolia, near dam.",Columbia,10/21/1989,South Central Plains,11140203,1A,lower,4011,AR_11140203_4011,1695,685.7468529,6.857468529
+LRED002B,Columbia,Lake/Reservoir,33.3011,-93.3586,"Lake Columbia - upper, W. of Magnolia near power line.",Columbia,10/21/1989,South Central Plains,11140203,1A,upper,4010,AR_11140203_4010,685,277.3490336,2.773490336
+LRED004A,June,Lake/Reservoir,33.3528,-93.4931,"Lake June - SW of Stamps,pt. access to dam.",Lafayette,10/21/1989,South Central Plains,11140205,1A,whole lake,4010,AR_11140205_4010,75,30.1756339,0.301756339
+LRED008A,Millwood,Lake/Reservoir,33.6967,-93.9611,Lake Millwood near Dam,Little River,1/1/1999,South Central Plains,11140109,1C,lower,4021,AR_11140109_4021,10344,4185.962654,41.85962663
+LRED008B,Millwood,Lake/Reservoir,33.7431,-94.0136,Lake Millwood near Yarborough Landing,Little River,8/2/1999,South Central Plains,11140109,1C,upper,4020,AR_11140109_4020,17576,7112.941771,71.12941762
+LRED009A,DeQueen,Lake/Reservoir,34.0997,-94.38028,Lake DeQueen near Dam,Sevier,1/1/1999,Ouachita Mountains,11140109,1C,lower,4091,AR_11140109_4091,1419,574.113359,5.74113359
+LRED009B,DeQueen,Lake/Reservoir,34.1342,-94.3914,Lake DeQueen upstream of highway bridge,Sevier,1/1/1999,Ouachita Mountains,11140109,1C,upper,4090,AR_11140109_4090,206,83.30094068,0.833009407
+LRED010A,Gillham,Lake/Reservoir,34.2119,-94.2292,Gillham Lake near Dam,Howard,1/1/1999,Ouachita Mountains,11140109,1C,lower,4071,AR_11140109_4071,833,337.0655186,3.370655186
+LRED010B,Gillham,Lake/Reservoir,34.2396,-94.2314,Gillham Lake - upper site,Howard,3/1/2011,Ouachita Mountains,11140109,1C,upper,4070,AR_11140109_4070,324,131.1189697,1.311189697
+LRED011A,Dierks,Lake/Reservoir,34.1456,-94.0961,Dierks Lake near Dam,Sevier,1/1/1999,Ouachita Mountains,11140109,1C,lower,4081,AR_11140109_4081,940,380.344163,3.803441628
+LRED011B,Dierks,Lake/Reservoir,34.1798,-94.0934,Dierks Lake - upper site between first two major coves,Sevier,3/1/2011,Ouachita Mountains,11140109,1C,upper,4080,AR_11140109_4080,423,171.1477336,1.711477338
+LWHI001A,Hogue,Lake/Reservoir,35.5797,-90.9614,Lake Hogue - NW of Waldenburg - close to S. levee.,Poinsett,10/21/1989,Mississippi Alluvial Plain,08020302,4B,whole lake,4010,AR_08020302_4010,237,95.9114193,0.959114193
+LWHI002A,Frierson,Lake/Reservoir,35.9714,-90.7229,Lake Frierson - mid. pt. of trans. fm. ramp parallel to dam,Greene,10/21/1989,Mississippi Alluvial Plain,08020302,4B,whole lake,4020,AR_08020302_4020,343,138.6106157,1.386106157
+LWHI005A,Des Arc,Lake/Reservoir,35.0219,-91.5089,Des Arc Lake - N. of Des Ark - on line fm. intake to levee,Prairie,10/21/1989,Mississippi Alluvial Plain,08020301,4D,whole lake,4020,AR_08020301_4020,295,119.2700785,1.192700785
+LWHI006A,Greenlee,Lake/Reservoir,34.8678,-91.1675,"Lake Greenlee -E. of Brinkley,E. of levee about 200 yds",Monroe,10/21/1989,Mississippi Alluvial Plain,08020304,4A,whole lake,4060,AR_08020304_4060,270,109.2849741,1.092849741
+LWHI010A,Greers Ferry,Lake/Reservoir,35.5228,-91.9917,Greers Ferry Lake near Dam,Cleburne,8/25/1999,Arkansas Valley,11010014,4E,lower (trout waters),4021,AR_11010014_4021,18151,7345.352192,73.45352192
+LWHI010B,Greers Ferry,Lake/Reservoir,35.5739,-92.1992,Greers Ferry Lake above Narrows near Higden,Cleburne,1/1/1999,Arkansas Valley,11010014,4E,upper,4020,AR_11010014_4020,12883,5213.662566,52.13662566
+LWHI011A,Norfork,Lake/Reservoir,36.2506,-92.2372,Norfork Lake near Dam,Baxter,1/1/1999,Ozark Highlands,11010006,4F,lower,4011,AR_11010006_4011,13833,5597.992175,55.97992175
+LWHI011B,Norfork,Lake/Reservoir,36.415,-92.2911,Norfork Lake near Cranfield Use Area,Baxter,1/1/1999,Ozark Highlands,11010006,4F,upper,4010,AR_11010006_4010,4127,1670.124949,16.70124949
+LWHI012A,Bull Shoals,Lake/Reservoir,36.3682,-92.5713,Bull Shoals Lake near Dam,Baxter,1/1/1999,Ozark Highlands,11010003,4I,lower (trout waters),4011,AR_11010003_4011,20496,8294.44485,89.21631425
+LWHI012B,Bull Shoals,Lake/Reservoir,36.4869,-92.9114,Bull Shoals Lake near Lead Hill,Boone,1/1/1999,Ozark Highlands,11010003,4I,upper,4010,AR_11010003_4010,13048,5280.264661,46.53097752
+LWHI013A,Beaver,Lake/Reservoir,36.4236,-93.8494,Beaver Lake above Dam,Carroll,1/1/1999,Ozark Highlands,11010001,4K,lower,4045,AR_11010001_4045,13546,5481.74936,54.8174936
+LWHI013B,Beaver,Lake/Reservoir,36.2089,-94.0158,Beaver Lake near War Eagle Park - upper site,Benton,1/1/1999,Ozark Highlands,11010001,4K,Hickory Creek site,4042,AR_11010001_4042,2473,1000.940399,3.499330077
+LWHI013C,Beaver,Lake/Reservoir,36.3333,-94.0179,Beaver Lake near Hwy. 12 Access - mid Lake,Benton,6/1/2011,Ozark Highlands,11010001,4K,mid,4043,AR_11010001_4043,7781,3148.989205,33.80522265
+LWHI014,Wilson,Lake/Reservoir,35.999,-94.135,Lake Wilson,Washington,7/25/2012,Boston Mountains,11010001,4K,whole lake,4030,AR_11010001_4030,29,11.85085239,0.118508524
+LWHI023,Mirandy,Lake/Reservoir,36.2789,-91.5203,Lake Mirandy,Sharp,7/25/2012,Ozark Highlands,11010010,4H,whole lake,4060,AR_11010010_4060,26,10.69218604,0.10692186
+LWHI026,Pioneer,Lake/Reservoir,36.2339,-91.7781,Pioneer Lake,Izard,7/25/2012,Ozark Highlands,11010012,4G,whole lake,4030,AR_11010012_4030,30,12.13663194,0.121366319
+LWHI027,Diamond,Lake/Reservoir,36.2131,-91.713,Diamond Lake,Izard,7/25/2012,Ozark Highlands,11010012,4G,whole lake,4020,AR_11010012_4020,113,45.66698363,0.456669836
+LWHI028,Crown,Lake/Reservoir,36.1958,-91.7424,Crown Lake,Izard,7/25/2012,Ozark Highlands,11010012,4G,whole lake,4010,AR_11010012_4010,610,246.8489581,2.468489581
+LWHI009A,Sequoyah ,Lake/Reservoir,36.0658,-94.0667,Lake Sequoyah near dam.,Washington,7/16/1994,Ozark Highlands,11010001,4K,whole lake,4050,AR_11010001_4050,425,171.7942431,1.717942431
+LWHI007A,Charles ,Lake/Reservoir,36.0645,-91.1414,Lake Charles - pt. closer to L. Shore - rec. pt. to pt. East,Lawrence,10/21/1989,Mississippi Alluvial Plain,11010009,4G,whole lake,4040,AR_11010009_4040,550,222.387712,2.22387712
+LMIS001A,Horseshoe ,Lake/Reservoir,34.9211,-90.3646,Horseshoe Lake - on line fm. Five Lakes across lake.,Crittenden,10/21/1989,Mississippi Alluvial Plain,08020203,5A,whole lake,4060,AR_08020203_4060,2388,966.4317377,9.664317377
+LMIS006B,Chicot ,Lake/Reservoir,33.3769,-91.2246,Lower Lake Chicot,Chicot,5/8/2018,Mississippi Alluvial Plain,08050002,2A,south of causeway,4011,AR_08050002_4011,3828,1549.155145,15.49155145
+LRED001A,Erling ,Lake/Reservoir,33.0583,-93.5225,"Lake Erling - lower,fm. pt. abovfe ramp to nearest prom. pt.",Lafayette,10/21/1989,South Central Plains,11140205,1A,lower,4022,AR_11140205_4022,2595,1050.022968,10.50022968
+LOUA021A,Cox Creek ,Lake/Reservoir,34.1759,-92.6215,Cox Creek Lake below AG&F Boat Ramp.,Grant,7/16/1994,South Central Plains,08040203,2C,whole lake,4110,AR_08040203_4110,245,99.15025481,0.991502548
+LARK023A,Jack Nolen ,Lake/Reservoir,35.2083,-94.2083,Lake Jack Nolan above dam,Sebastian,7/16/1994,Arkansas Valley,11110201,3H,whole lake,4030,AR_11110201_4030,182,73.46755249,0.734675525
+LARK003A,Harris Brake,Lake/Reservoir,34.9713,-92.7764,Harris Break Lake - off east end of spillway.,Perry,10/21/1989,Arkansas Valley,11110206,3E,whole lake,4030,AR_11110206_4030,1260,509.7690935,5.097690935
+LARK009A,SWEPCO,Lake/Reservoir,36.24,-94.5431,"SWEPCO Lake - north of Siloam Springs, AR - midpoint of dam",Benton,10/21/1989,Ozark Highlands,11110103,3J,whole lake,4060,AR_11110103_4060,416,168.5164925,1.685164925
+LWHI004A,Ashbaugh,Lake/Reservoir,36.2642,-90.7703,Lake Ashbaugh - NW corner of lake,Greene,10/21/1989,Mississippi Alluvial Plain,11010007,4G,whole lake,4010,AR_11010007_4010,437,176.8974504,1.768974504
+LWHI003A,Old Town,Lake/Reservoir,34.3894,-90.8181,Old Town Lake - line fm. road split on W. side across lake.,Phillips,10/21/1989,Mississippi Alluvial Plain,08020303,4A,whole lake,4010,AR_08020303_4010,2135,864.2016102,8.642016102
+LOUA009A,Enterprise,Lake/Reservoir,33.0572,-91.6111,Enterprise - W. of Silmot - 3/4 mi. N. Game & Fish rmp.,Ashley,10/21/1989,Mississippi Alluvial Plain,08040205,2B,whole lake,4050,AR_08040205_4050,198,80.01871908,0.800187191
+LOUA013A,Calion,Lake/Reservoir,33.3217,-92.5311,Calion Lake -,Union,10/21/1989,South Central Plains,08040201,2D,whole lake,4070,AR_08040201_4070,495,200.3063272,2.003063272
+LRED006A,First Old River,Lake/Reservoir,33.4986,-93.7706,First Old River Lake - @ Hervey - pt. fm. access to point.,Hempstead,10/21/1989,South Central Plains,11140201,1B,whole lake,4020,AR_11140201_4020,220,89.21767862,0.892176786
+LRED007A,Wihelmina,Lake/Reservoir,34.6014,-94.359,Lake Wilhelmina - pt. on line parallel to dam.,Polk,10/21/1989,Ouachita Mountains,11140108,1D,whole lake,4010,AR_11140108_4010,197,79.87581713,0.798758171
+LARK029A,Dardanelle,Lake/Reservoir,35.2534,-93.175,Dardanelle Lake,NA,12/27/2013,Arkansas Valley,11110202,3H,whole lake,4060,AR_11110202_4060,34041,13776.1,137.761
+LARK019A,Bailey,Lake/Reservoir,35.1303,-92.92,Lake Bailey - in Petit Jean St. Park off visitors center.,Conway,10/21/1989,Arkansas Valley,11110204,3G,whole lake,4030,AR_11110204_4030,111,44.72111277,0.447211128
+LWHI015,Leatherwood,Lake/Reservoir,36.4454,-93.7512,Lake Leatherwood,Carroll,7/25/2012,Ozark Highlands,11010001,4K,whole lake,4020,AR_11010001_4020,85,34.21520397,0.34215204
+LMIS005A,Mallard,Lake/Reservoir,35.886,-90.0904,"Mallard Lake - N. of Roseland AR near W. shore ,trans.w/out.",Mississippi,10/21/1989,Mississippi Alluvial Plain,08020204,5C,whole lake,4010,AR_08020204_4010,318,128.5065365,1.284
+LMIS003A,Bear Creek,Lake/Reservoir,34.7089,-90.6946,Bear Creek Lake,Lee,10/21/1989,Mississippi Alluvial Plain,08020203,5A,whole lake,4020,AR_08020203_4020,493,199.5072517,1.995072517
+LMIS004A,Storm Creek,Lake/Reservoir,34.5958,-90.6131,Storm Creek Lake - on line fm. pt. above launch across lake,Phillips,10/21/1989,Mississippi Alluvial Plain,08020100,6B,whole lake,4010,AR_08020100_4010,273,110.3703333,1.103703333
+LOUA001A,Grand Lake,Lake/Reservoir,33.0736,-91.2117,Grand Lake - close to W. shore from boat dock.,Chicot,10/21/1989,Mississippi Alluvial Plain,08050002,2A,whole lake,4020,AR_08050002_4020,1192,482.2956903,4.822956903
+LOUA015A,Tri-County,Lake/Reservoir,33.7858,-92.3658,Tri County Lake - above ramp @ dam.,Calhoun,10/21/1989,South Central Plains,08040201,2D,whole lake,4080,AR_08040201_4080,287,116.1402495,1.161402495
+LARK007A,Atkins,Lake/Reservoir,35.2151,-92.9425,"Lake Atkins - midpoint between pier, N. side, & S. side.",Pope,10/21/1989,Arkansas Valley,11110203,3F,whole lake,4070,AR_11110203_4070,674,272.8338807,2.728338807
+LWHI008A,Barnett,Lake/Reservoir,35.2264,-91.9517,Barnett Lake - Between Ramance and Floyd.,White,10/21/1989,Arkansas Valley,08020301,4D,whole lake,4060,AR_08020301_4060,257,104.1614923,1.042
+LRED005A,Bois DArc ,Lake/Reservoir,33.5519,-93.7011,Bois D Arc Lake - SW of Spring Hill - pt. fm. ramp across.,Hempstead,10/21/1989,South Central Plains,11140201,1B,whole lake,4010,AR_11140201_4010,642,259.625647,2.59625647
+LOUA024A,South Fork Lake,Lake/Reservoir,33.8146,-93.7753,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+LOUA023A,Gurdon,Lake/Reservoir,33.9134,-93.167,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA

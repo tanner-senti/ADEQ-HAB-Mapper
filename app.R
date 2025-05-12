@@ -49,11 +49,11 @@ ui <- dashboardPage(
                   dateRangeInput("cyanoDateRange", "Date Range:", 
                                  start = Sys.Date() - 365, end = Sys.Date(), format = "mm-dd-yyyy"),
                   selectInput("toxinType", "Toxin Type:",
-                              choices = c("Microcystin" = "microcystin",
-                                          "Cylindrospermopsin" = "cylindro",
-                                          "Anatoxin-a" = "anatox",
-                                          "Saxitoxin" = "saxitox",
-                                          "Phycocyanin" = "phyco"),
+                              choices = c("Microcystin" = "Microcystin",
+                                          "Cylindrospermopsin" = "Cylindrospermopsin",
+                                          "Anatoxin-a" = "Anatoxin-a",
+                                          "Saxitoxin" = "Saxitoxin",
+                                          "Phycocyanin" = "Phycocyanin"),
                               selected = "mcx"),
                   actionButton("refreshCyanoData", "Refresh Data", icon = icon("sync")),
                   actionButton("resetCyanoMap", "Reset View", icon = icon("undo")),
@@ -560,9 +560,10 @@ server <- function(input, output, session) {
       addCircleMarkers(
         data = map_data,
         lng = ~Longitude, lat = ~Latitude,
-        radius = 6,
+        radius = 8,
         stroke = TRUE,
-        weight = 2,
+        weight = 3,
+        color = "#0DA5B5",
         layerId = ~SamplingPoint, # ID to track site clicks
         # color = ~ifelse(Status == "Active", "darkred", "darkblue"),
         # fillColor = ~ifelse(Status == "Active", "red", "blue"),
@@ -595,7 +596,7 @@ server <- function(input, output, session) {
     req(nrow(site_data()) > 0)
     
     p <- ggplot(site_data(), aes(x = DateSampled, y = WebResult,
-                                 tooltip = paste("Date:", format(DateSampled, "%m-%d-%Y"),
+                                 tooltip = paste("Date:", format(DateSampled, "%Y-%m-%d"),
                                                  "<br>Result:", WebResult,
                                                  #"<br>Value:", DL, # weird display issue 
                                                  "<br>Qualifiers:", Qualifier)
@@ -606,17 +607,25 @@ server <- function(input, output, session) {
       scale_shape_manual(values = c("Measured value" = 16, "<DL" = 17, ">DL" = 17)) + # 16 = circle, 17 = triangle
       theme_classic(base_size = 14) +
       labs(
-        title = paste("Toxin Levels at", clicked_site()),
+        title = paste(input$toxinType, "levels at", clicked_site()),
         x = "Date",
-        y = "Result",
+        y = expression(paste("Result (", mu, "g/L)")),
         color = "Qualifiers",
         shape = "Values"
       ) +
+      scale_x_date(date_labels = "%Y-%m-%d") +
       theme( axis.text.x = element_text(angle = 45, hjust =1))
     
     girafe(ggobj = p)
   })
   
+  # Table for toxin tab:
+  output$cyanoTable <- DT::renderDT ({
+    req(nrow(site_data()) > 0)
+    
+    DT::datatable(site_data())
+    
+  })
   
   
 }

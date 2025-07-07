@@ -26,6 +26,7 @@ ui <- dashboardPage(
   # Main app body here:
   dashboardHeader(title = "HAB Data Explorer"),
   dashboardSidebar(
+    width = 270,
     sidebarMenu(id = "tabs",
                 menuItem("HAB Advisories Map", tabName = "habAdvisories", icon = icon("triangle-exclamation")),
                 
@@ -34,13 +35,24 @@ ui <- dashboardPage(
                 # explorer part of the Server to make the app run faster:
                 # menuItem("Cyanotoxin Explorer", tabName = "cyanotoxinData", icon = icon("flask")),
                 hr(),
+                
                 # Panel for HAB Advisories tab:
                 conditionalPanel(
                   condition = "input.tabs == 'habAdvisories'",
-                  dateRangeInput("dateRange", "Select Date Range:", format = "mm-dd-yyyy"),
-                  textInput("searchLocation", "Search Location:", ""),
+                  dateRangeInput("dateRange", "Filter to a Date Range:", format = "mm-dd-yyyy"),
+                  textInput("searchLocation", "Search by Lake Name:", ""),
                   checkboxInput("showActiveOnly", "Show Active HABs Only", FALSE),
-                  actionButton("resetMap", "Reset View", icon = icon("undo")),
+                  fluidRow(
+                    column(width = 4,
+                           actionButton("resetFilters", "Reset Filters", icon = icon("undo"))
+                    ),
+                    
+                    column(width = 1),
+                    column(width = 4,
+                           actionButton("resetMap", "Reset Map", icon = icon("crosshairs"))
+                    )
+                  ),
+        
                   hr(),
                   # helpText("HAB = Harmful Algal Bloom"),
                   # helpText("Red markers indicate active advisories"),
@@ -137,6 +149,7 @@ ui <- dashboardPage(
 
 server <- function(input, output, session) {
   
+  selected_site <- reactiveVal(NULL)
   database_path <- reactiveVal(NULL)
   
   # Data work ----
@@ -154,8 +167,8 @@ server <- function(input, output, session) {
   habs_raw <- reactive({
     req(file.exists("Data/hab_advisory_database.csv"))
     tryCatch({
-       read.csv("Data/hab_advisory_database.csv")
-      # read.csv("Data/current_hab_test.csv") # Fake current data for testing
+       # read.csv("Data/hab_advisory_database.csv")
+       read.csv("Data/current_hab_test.csv") # Fake current data for testing
     }, error = function(e) {
       showNotification("Error loading HAB data", type = "error")
       data.frame()
@@ -287,7 +300,8 @@ server <- function(input, output, session) {
           color = ~status_color,
           fillColor = ~status_color,
           fillOpacity = 0.8,
-          popup = ~popup_text
+          popup = ~popup_text,
+          layerId = ~WaterbodyName
         )
       
       # Info popup message
@@ -337,16 +351,53 @@ server <- function(input, output, session) {
   })
   
   
+  # Observe map marker clicks:
+  observeEvent(input$advisoriesMap_marker_click, {
+    click <- input$advisoriesMap_marker_click
+    if (!is.null(click$id)) {
+      selected_site(click$id)
+    }
+  })
   
   # Observe reset map button
   observeEvent(input$resetMap, {
-    leafletProxy("advisoriesMap") %>% 
+    selected_site(NULL)
+    leafletProxy("advisoriesMap") %>%
       setView(lng = -92.3731, lat = 34.7465, zoom = 7)
+    
+    runjs("
+    document.querySelectorAll('.leaflet-control-layers-base label').forEach(function(label) {
+      if(label.textContent.trim() === 'Street') {
+        label.querySelector('input').click();
+      }
+    });
+  ")
   })
+  
+  
+  # Reset filters button
+  observeEvent(input$resetFilters, {
+    selected_site(NULL)
+    updateTextInput(session, "searchLocation", value = "")
+    updateCheckboxInput(session, "showActiveOnly", value = FALSE)
+    # Reset date range to full
+    if (nrow(habs()) > 0) {
+      min_date <- min(habs()$DatePosted, na.rm = TRUE)
+      max_date <- max(coalesce(habs()$DateLifted, Sys.Date()), na.rm = TRUE)
+      updateDateRangeInput(session, "dateRange", start = min_date, end = max_date)
+    }
+  })
+  
+  
   
   ### HAB DATA TABLE OUTPUT ###
   output$habTable <- DT::renderDataTable({
     map_data <- filtered_data()
+    
+    # If site selected from the map, further filter to that site
+    if (!is.null(selected_site())) {
+      map_data <- map_data %>% filter(WaterbodyName == selected_site())
+    }
     
     # If no data, return empty data frame with column names
     if(nrow(map_data) == 0) {

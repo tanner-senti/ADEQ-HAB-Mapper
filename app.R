@@ -18,6 +18,7 @@ readRenviron(".Renviron")
 
 # Define local temp dir for the downloaded data:
 temp_dir <- tempdir()
+fallback_data_path <- "WebLIMS_backup.duckdb" # Update this with backup database
 
 
 # Create a better UI with dashboardPage and tabbed interface
@@ -33,8 +34,10 @@ ui <- dashboardPage(
                 # Comment/uncomment this single line below to hide/show the cyanotoxin tab in the app.
                 # If NOT using the cyanotoxin explorer tab, can also uncomment the entire cyanotoxin 
                 # explorer part of the Server to make the app run faster:
-                # menuItem("Cyanotoxin Explorer", tabName = "cyanotoxinData", icon = icon("flask")),
-                hr(),
+                
+                 menuItem("Cyanotoxin Explorer", tabName = "cyanotoxinData", icon = icon("flask")),
+               
+                 hr(),
                 
                 # Panel for HAB Advisories tab:
                 conditionalPanel(
@@ -68,10 +71,7 @@ ui <- dashboardPage(
                                  start = Sys.Date() - 365, end = Sys.Date(), format = "mm-dd-yyyy"),
                   selectInput("toxinType", "Toxin Type:",
                               choices = c("Microcystin" = "Microcystin",
-                                          "Cylindrospermopsin" = "Cylindrospermopsin",
-                                          "Anatoxin-a" = "Anatoxin-a",
-                                          "Saxitoxin" = "Saxitoxin",
-                                          "Phycocyanin" = "Phycocyanin"),
+                                          "Cylindrospermopsin" = "Cylindrospermopsin"),
                               selected = "mcx"),
                   actionButton("refreshCyanoData", "Refresh Data", icon = icon("sync")),
                   actionButton("resetCyanoMap", "Reset View", icon = icon("undo")),
@@ -127,8 +127,11 @@ ui <- dashboardPage(
                 ),
                 column(width = 6,
                        box(width = 12,
-                           withSpinner(uiOutput("cyanoPlotUI", height = "500px")),
-                           status = "info", solidHeader = TRUE, title = "Cyanotoxin concentration over time"
+                           div(
+                             style = "height: auto; max-height: 500px;  overflow: hidden;",
+                             withSpinner(uiOutput("cyanoPlotUI"))
+                           ),
+                           status = "info", solidHeader = TRUE, title = "Cyanotoxin concentration over time",
                        )
                        )
               ),
@@ -167,8 +170,8 @@ server <- function(input, output, session) {
   habs_raw <- reactive({
     req(file.exists("Data/hab_advisory_database.csv"))
     tryCatch({
-       # read.csv("Data/hab_advisory_database.csv")
-       read.csv("Data/current_hab_test.csv") # Fake current data for testing
+        read.csv("Data/hab_advisory_database.csv")
+       #read.csv("Data/current_hab_test.csv") # Fake current data for testing
     }, error = function(e) {
       showNotification("Error loading HAB data", type = "error")
       data.frame()
@@ -460,307 +463,378 @@ server <- function(input, output, session) {
   # Step 1: Function to Fetch data from server and save tables to local database
   # Function only runs once initially, when Observe() calls it below
   
-  # fetch_data <- reactive({
-  #   runjs('document.getElementById("loading-overlay").style.display = "flex";')
-  #   runjs('document.getElementById("loading-message").textContent = "Fetching data from server, please wait...";')
-  # 
-  #   server_grab <- FALSE
-  #   database_file <- NULL
-  #   db_message <- NULL
-  # 
-  #   tryCatch({
-  #     server_con <- dbConnect(
-  #       odbc::odbc(),
-  #       Driver   = "SQL Server",
-  #       Server = Sys.getenv("SQL_SERVER"), #Testing, fix this
-  #       Database = Sys.getenv("SQL_DATABASE"),
-  #       Trusted_Connection = "Yes")
-  # 
-  #     # Relevant toxin parameter names:
-  #     # Anatoxin (ug/l)
-  #     # Cylindrospermopsin (ug/l)
-  #     # Microcystins (ug/l)
-  #     # Saxitoxin (ug/l)
-  #     # Phycocyanin (ug/l)
-  # 
-  #     # Pull only relevant results (toxin parameters):
-  #    # WebLIMSResults <- dbReadTable(server_con, "WebLIMSResults") # THis reads in all data
-  #     WebLIMSResults <- dbGetQuery(
-  #       server_con,
-  #       "SELECT *
-  #         FROM WebLIMSResults
-  #         WHERE WebParameter IN ('Anatoxin (ug/l)', 'Cylindrospermopsin (ug/l)', 'Microcystins (ug/l)',
-  #       'Saxitoxin (ug/l)', 'Phycocyanin (ug/l)')"
-  #     )
-  # 
-  #     # Get all stations that have relevant data:
-  #     # WebLIMSStations  <- dbReadTable(server_con, "WebLIMSStations") # This reads in all stations
-  #     WebLIMSStations <- dbGetQuery(server_con, "
-  #   SELECT DISTINCT s.*
-  #   FROM WebLIMSStations s
-  #   INNER JOIN WebLIMSResults r ON s.StationID = r.StationID
-  #   WHERE WebParameter IN ('Anatoxin (ug/l)', 'Cylindrospermopsin (ug/l)', 'Microcystins (ug/l)',
-  #       'Saxitoxin (ug/l)', 'Phycocyanin (ug/l)')")
-  # 
-  #     server_grab <- TRUE
-  # 
-  #     # Close the SQL connection
-  #     dbDisconnect(server_con)
-  # 
-  #     # Save tables to temp_dir duckDB database - use this connection for rest of app!
-  #     runjs('document.getElementById("loading-message").textContent = "Initializing database...";')
-  # 
-  #     # Create duckDB database for data
-  #     full_con <- dbConnect(duckdb::duckdb(), paste0(temp_dir, "/weblims_cyano.duckdb"))
-  # 
-  #     # Convert Date to character for db compatibility (must convert back to date whenever read in):
-  #     WebLIMSResults$DateSampled <- as.character(WebLIMSResults$DateSampled)
-  # 
-  #     # Additional data cleaning work:
-  #     WebLIMSResults <- WebLIMSResults %>%
-  #       mutate(
-  #         WebResult = as.character(WebResult),
-  #         WebResult = gsub("[^0-9.<>=]", "", WebResult),  # Remove any non-numeric characters except <, >, .
-  #         DL = case_when(
-  #           grepl("^>", WebResult) ~ ">DL",
-  #           grepl("^<", WebResult) ~ "<DL",
-  #           TRUE ~ "Measured value"
-  #         ),
-  #         WebResult = case_when(
-  #           grepl("^>", WebResult) ~ suppressWarnings(as.numeric(sub(">", "", WebResult))),
-  #           grepl("^<", WebResult) ~ suppressWarnings(as.numeric(sub("<", "", WebResult))) / 2,
-  #           TRUE ~ suppressWarnings(as.numeric(trimws(WebResult)))
-  #         ),
-  #         Qualifier = if_else(is.na(Qualifier) | Qualifier == "", "None", Qualifier), # Handle empty and NA values
-  #         RelativeDepthSample = if_else(is.na(trimws(RelativeDepthSample)) | trimws(RelativeDepthSample) == "",
-  #                                         "N/A",
-  #                                         toupper(trimws(RelativeDepthSample)))
-  #       ) %>%
-  #       filter(!is.na(WebResult)) %>%  # Remove rows where FinalResult is NA
-  #       mutate(across(c(Qualifier, RelativeDepthSample, DL), as.factor))
-  # 
-  #     # Saving R dataframes to the database:
-  #     dbWriteTable(full_con, "WebLIMSResults", WebLIMSResults, overwrite = TRUE)
-  #     dbWriteTable(full_con, "WebLIMSStations", WebLIMSStations, overwrite = TRUE)
-  # 
-  #     rm(WebLIMSResults)
-  #     rm(WebLIMSStations)
-  # 
-  #     dbDisconnect(full_con)
-  # 
-  #     database_file <- paste0(temp_dir, "/weblims_cyano.duckdb")
-  # 
-  #   }, error = function(e) {
-  #     message("Error fetching or initializing data.:", e$message)
-  #   })
-  # 
-  # 
-  #   if (!server_grab) {
-  #     # code here runs IF the SQL Server data grab FAILS:
-  #     runjs('document.getElementById("loading-message").textContent = "Failed to fetch the data... use backup here?";')
-  #     #
-  # 
-  #   } else {
-  #     # Code here runs IF the SQL Server data grab SUCCEEDS:
-  #     # Fetch the date range from duckDB
-  #     full_con <- dbConnect(duckdb::duckdb(), database_file)
-  # 
-  #     # Rename StationID to SamplingPoint to reduce errors:
-  #     dbExecute(full_con, "ALTER TABLE WebLIMSResults RENAME COLUMN StationID to SamplingPoint")
-  # 
-  #     date_range <- dbGetQuery(full_con, "SELECT MIN(DateSampled) AS min_date, MAX(DateSampled) AS max_date FROM WebLIMSResults")
-  #     # FIX the leading/trailing spaces for duckDB here:
-  #     # Run update queries to trim spaces
-  #     dbExecute(full_con, "UPDATE WebLIMSResults SET SamplingPoint = TRIM(SamplingPoint);")
-  #     dbExecute(full_con, "UPDATE WebLIMSStations SET StationID = TRIM(StationID);")
-  # 
-  # 
-  # 
-  #     dbDisconnect(full_con)
-  # 
-  #     db_message <- paste("Using most recent version", "<br>", "of the database. Data available",
-  #                         "<br>", "between ", format(as.Date(date_range$min_date), "%m-%d-%Y"), " and ", format(as.Date(date_range$max_date), "%m-%d-%Y"))
-  #   }
-  # 
-  #   runjs('document.getElementById("loading-overlay").style.display = "none";')  # Hide overlay after success
-  # 
-  #   output$db_message <- renderUI({
-  #     HTML(db_message)
-  #   })
-  #   # Output is path to database file (full duckDB - see WebLIMS-data-visualizer app for backup db usage)
-  #   database_file
-  # })
-  # 
-  # # Calling the fetch_data function (only happens once initially):
-  # observeEvent(TRUE, {
-  #   db_file <- fetch_data()
-  #   database_path(db_file)
-  # }, once = TRUE)
-  # 
-  # # Getting data for map:
-  # cyan_data <- reactive({
-  #   req(input$toxinType)
-  # 
-  #   database_file <- database_path()
-  # 
-  #   con <- dbConnect(duckdb(), database_file)
-  # 
-  #   query <- paste0(
-  #     "SELECT SamplingPoint, DateSampled, WebResult, Units, Qualifier, ",
-  #     "WebParameter, DL, RelativeDepthSample, WebLIMSStations.Description, WebLIMSStations.Latitude, WebLIMSStations.Longitude ",
-  #     "FROM WebLIMSResults ",
-  #     "LEFT JOIN WebLIMSStations ON WebLIMSResults.SamplingPoint = WebLIMSStations.StationID"#,
-  #     # "WHERE SamplingPoint = '", input$site, "' ",
-  #     # "AND WebParameter = '", input$parameter, "'"
-  #   )
-  # 
-  #   raw_data <- dbGetQuery(con, query)
-  #   dbDisconnect(con)
-  # 
-  #   # Filter based on toxin type (case-insensitive match)
-  #   filtered_data <- raw_data %>%
-  #     filter(grepl(input$toxinType, WebParameter, ignore.case = TRUE))
-  # 
-  #   # Return filtered data object
-  #   filtered_data
-  # })
-  # 
-  # 
-  # ### Cyanotoxin map ###
-  # output$cyanoMap <- renderLeaflet({
-  #   # Create base map with selected basemap
-  #   base_map <- leaflet() %>%
-  #     addProviderTiles("OpenStreetMap", group = "Street") %>%
-  #     addProviderTiles("USGS.USImagery", group = "Satellite") %>%
-  #     setView(lng = -92.3731, lat = 34.7465, zoom = 7) %>%  # Default to Arkansas
-  #     addLayersControl(
-  #       baseGroups = c("Street", "Satellite"),
-  #       position = "topleft",
-  #       options = layersControlOptions(collapsed = FALSE)
-  #     )
-  # 
-  # 
-  #   map_data <- cyan_data()
-  # 
-  #    # Test with browser:
-  #   # browser()
-  # 
-  #   # Add markers to the map from WebLIMSStations:
-  #   base_map <- base_map %>%
-  #     addCircleMarkers(
-  #       data = map_data,
-  #       lng = ~Longitude, lat = ~Latitude,
-  #       radius = 8,
-  #       stroke = TRUE,
-  #       weight = 3,
-  #       color = "#0DA5B5",
-  #       layerId = ~SamplingPoint, # ID to track site clicks
-  #       # color = ~ifelse(Status == "Active", "darkred", "darkblue"),
-  #       # fillColor = ~ifelse(Status == "Active", "red", "blue"),
-  #       # fillOpacity = 0.8,
-  #       popup = ~paste(
-  #         "<strong>Location:</strong>", Description,
-  #         "<br><strong>Site ID:</strong>", SamplingPoint
-  #       )
-  #     )
-  # 
-  # })
-  # 
-  # ### PLOTTING THE CLICKED SITE DATA ####
-  # 
-  # # Reactive to get clicked site:
-  # clicked_site <- reactive({
-  #   req(input$cyanoMap_marker_click)
-  #   input$cyanoMap_marker_click$id
-  # })
-  # 
-  # # Filtering data to clicked site:
-  # site_data <- reactive({
-  #   req(clicked_site())
-  #   cyan_data() %>% filter(SamplingPoint == clicked_site()) %>%
-  #     mutate(DateSampled = as.Date(DateSampled))
-  # })
-  # 
-  # # Placeholder text until user selects a site:
-  # output$cyanoPlotUI <- renderUI({
-  #   if (is.null(input$cyanoMap_marker_click)) {
-  #     tags$div("Select a site to display data", style = "text-align:center;
-  #              color: #777; padding-top: 235px; padding-bottom: 235px; font-size: 20px;")
-  #   } else {
-  #     girafeOutput("cyanoPlot", height = "500px")
-  #   }
-  # })
-  # 
-  # # PLOTTING:
-  # output$cyanoPlot <- renderGirafe({
-  #   req(nrow(site_data()) > 0)
-  # 
-  #   # Check if RelativeDepthSample has any non-NA values
-  #   use_size <- any(site_data()$RelativeDepthSample != "N/A")
-  # 
-  #   p <- ggplot(site_data(), aes(x = DateSampled, y = WebResult,
-  #                                tooltip = paste("Date:", format(DateSampled, "%Y-%m-%d"),
-  #                                                "<br>Result:", WebResult,
-  #                                                #"<br>Value:", DL, # weird display issue
-  #                                                "<br>Qualifiers:", Qualifier,
-  #                                                "<br>Relative Depth:", RelativeDepthSample))) +
-  #     geom_point_interactive(aes(color = Qualifier, shape = DL),
-  #                            alpha = 0.7,
-  #                            size = 2.5) +
-  #     scale_shape_manual(values = c("Measured value" = 16, "<DL" = 17, ">DL" = 17)) + # 16 = circle, 17 = triangle
-  #     theme_classic(base_size = 14) +
-  #     labs(
-  #       title = paste(input$toxinType, "levels at", clicked_site()),
-  #       x = "Date",
-  #       y = expression(paste("Result (", mu, "g/L)")),
-  #       color = "Qualifiers",
-  #       shape = "Values"
-  #     ) +
-  #     scale_x_date(date_labels = "%Y-%m-%d") +
-  #     theme( axis.text.x = element_text(angle = 45, hjust =1))
-  # 
-  #   # Add size mapping only if RelativeDepthSample is not all NA
-  #   if (use_size) {
-  #     p <- p +
-  #       geom_point_interactive(aes(size = RelativeDepthSample, color = Qualifier, shape = DL), alpha = 0.7) +
-  #       # scale_shape_manual(values = c("Measured value" = 16, "<DL" = 17, ">DL" = 17)) +
-  #       scale_size_manual(values = c("EPILIMNION" = 2.5, "HYPOLIMNION" = 5.5,
-  #                                    "THERMOCLINE" = 4, "MID-DEPTH" = 4, "N/A" = 7),
-  #                         name = "Relative Depth",
-  #                         drop = TRUE)
-  #   }
-  # 
-  #   girafe(ggobj = p)
-  # })
-  # 
-  # # Table for toxin tab:
-  # output$cyanoTable <- DT::renderDT ({
-  #   req(nrow(site_data()) > 0)
-  # 
-  #   DT::datatable(site_data()[, c("SamplingPoint", "DateSampled","WebResult", "Units", "Qualifier", "WebParameter", "DL","RelativeDepthSample", "Description", "Latitude", "Longitude")],
-  #                 colnames = c("Site", "Date","Result", "Units", "Qualifier", "Parameter", "DL","Relative Depth", "Description", "Latitude", "Longitude"),
-  #                 extensions = 'Buttons',  # Enable buttons extension)
-  #   options = list(
-  #     pageLength = 10,
-  #     autoWidth = TRUE,
-  #     responsive = TRUE,
-  #     searching = FALSE  # Disable the search function
-  #   ),
-  #   rownames = FALSE)
-  # })
-  # 
-  # # Handle data downloader for toxin table:
-  # output$downloadCyanoData <- downloadHandler(
-  #   filename = function() {
-  #     paste0(clicked_site(), "_", input$toxinType, ".csv")
-  #   },
-  #   content = function(file) {
-  #     write.csv(site_data()[, c("SamplingPoint", "DateSampled", "WebResult", "Units", "Qualifier", "WebParameter", "DL", "RelativeDepthSample", "Description", "Latitude", "Longitude")],
-  #               file,
-  #               row.names = FALSE)
-  #   }
-  # )
-  # 
+  fetch_data <- reactive({
+    runjs('document.getElementById("loading-overlay").style.display = "flex";')
+    runjs('document.getElementById("loading-message").textContent = "Fetching data from server, please wait...";')
+
+    server_grab <- FALSE
+    database_file <- NULL
+    db_message <- NULL
+
+    tryCatch({
+      server_con <- dbConnect(
+        odbc::odbc(),
+        Driver   = "SQL Server",
+        Server = Sys.getenv("SQL_SERVER_FAILS"), #Testing, fix this
+        Database = Sys.getenv("SQL_DATABASE"),
+        Trusted_Connection = "Yes")
+
+      # Relevant toxin parameter names:
+      # Anatoxin (ug/l) - Don't use
+      # Cylindrospermopsin (ug/l)
+      # Microcystins (ug/l)
+      # Saxitoxin (ug/l) - Don't use
+      # Phycocyanin (ug/l) - Don't use
+
+      # Pull only relevant results (toxin parameters):
+     # WebLIMSResults <- dbReadTable(server_con, "WebLIMSResults") # THis reads in all data
+      WebLIMSResults <- dbGetQuery(
+        server_con,
+        "SELECT *
+          FROM WebLIMSResults
+          WHERE WebParameter IN ('Cylindrospermopsin (ug/l)', 'Microcystins (ug/l)')"
+      )
+
+      # Get all stations that have relevant data:
+      # WebLIMSStations  <- dbReadTable(server_con, "WebLIMSStations") # This reads in all stations
+      WebLIMSStations <- dbGetQuery(server_con, "
+    SELECT DISTINCT s.*
+    FROM WebLIMSStations s
+    INNER JOIN WebLIMSResults r ON s.StationID = r.StationID
+    WHERE WebParameter IN ('Cylindrospermopsin (ug/l)', 'Microcystins (ug/l)')")
+
+      server_grab <- TRUE
+
+      # Close the SQL connection
+      dbDisconnect(server_con)
+
+      # Save tables to temp_dir duckDB database - use this connection for rest of app!
+      runjs('document.getElementById("loading-message").textContent = "Initializing database...";')
+
+      # Create an ephemeral duckDB database for data
+      full_con <- dbConnect(duckdb::duckdb(), paste0(temp_dir, "/weblims_cyano.duckdb"))
+
+      # Convert Date to character for db compatibility (must convert back to date whenever read in):
+      WebLIMSResults$DateSampled <- as.character(WebLIMSResults$DateSampled)
+
+      # Additional data cleaning work:
+      WebLIMSResults <- WebLIMSResults %>%
+        mutate(
+          WebResult = as.character(WebResult),
+          WebResult = gsub("[^0-9.<>=]", "", WebResult),  # Remove any non-numeric characters except <, >, .
+          DL = case_when(
+            grepl("^>", WebResult) ~ ">DL",
+            grepl("^<", WebResult) ~ "<DL",
+            TRUE ~ "Measured value"
+          ),
+          WebResult = case_when(
+            grepl("^>", WebResult) ~ suppressWarnings(as.numeric(sub(">", "", WebResult))),
+            grepl("^<", WebResult) ~ suppressWarnings(as.numeric(sub("<", "", WebResult))) / 2,
+            TRUE ~ suppressWarnings(as.numeric(trimws(WebResult)))
+          ),
+          Qualifier = if_else(is.na(Qualifier) | Qualifier == "", "None", Qualifier), # Handle empty and NA values
+          RelativeDepthSample = if_else(is.na(trimws(RelativeDepthSample)) | trimws(RelativeDepthSample) == "",
+                                          "N/A",
+                                          toupper(trimws(RelativeDepthSample)))
+        ) %>%
+        filter(!is.na(WebResult)) %>%  # Remove rows where FinalResult is NA
+        mutate(across(c(Qualifier, RelativeDepthSample, DL), as.factor))
+
+      # Saving R dataframes to the database:
+      dbWriteTable(full_con, "WebLIMSResults", WebLIMSResults, overwrite = TRUE)
+      dbWriteTable(full_con, "WebLIMSStations", WebLIMSStations, overwrite = TRUE)
+
+      rm(WebLIMSResults)
+      rm(WebLIMSStations)
+
+      dbDisconnect(full_con)
+
+      database_file <- paste0(temp_dir, "/weblims_cyano.duckdb")
+
+    }, error = function(e) {
+      message("Error fetching or initializing data.:", e$message)
+    })
+
+
+    if (!server_grab) {
+      # code here runs IF the SQL Server data grab FAILS:
+      runjs('document.getElementById("loading-message").textContent = "Failed to fetch latest database, using backup...";')
+      
+      # ENSURE backup database column names and types are identical to SQL Server!!!
+      # For now, pulling in tables to R and doing work here to reduce errors with
+      # altering the original/backup database
+      
+      conn_sqlite <- dbConnect(duckdb::duckdb(), fallback_data_path)
+      
+      # Rename StationID to SamplingPoint to reduce errors (need to do this once every
+      # time the backup database is updated, then it will be set):
+      cols <- dbListFields(conn_sqlite, "WebLIMSResults")
+      if ("StationID" %in% cols) {
+        dbExecute(conn_sqlite, "ALTER TABLE WebLIMSResults RENAME COLUMN StationID TO SamplingPoint")
+      }
+      
+      # FIX the leading/trailing spaces for SQLITE here:
+      dbExecute(conn_sqlite, "UPDATE WebLIMSResults SET SamplingPoint = TRIM(SamplingPoint);")
+      dbExecute(conn_sqlite, "UPDATE WebLIMSStations SET StationID = TRIM(StationID);")
+      
+      # Since this is the full LIMS database, can filter to just the cyano data in SQL:
+      WebLIMSResults <- dbGetQuery(conn_sqlite, "
+        SELECT *
+        FROM WebLIMSResults
+        WHERE WebParameter IN ('Cylindrospermopsin (ug/l)', 'Microcystins (ug/l)')")
+      
+      WebLIMSStations <- dbGetQuery(conn_sqlite, "
+        SELECT DISTINCT s.*
+        FROM WebLIMSStations s
+        INNER JOIN WebLIMSResults r ON s.StationID = r.SamplingPoint
+        WHERE WebParameter IN ('Cylindrospermopsin (ug/l)', 'Microcystins (ug/l)')")
+      
+      dbDisconnect(conn_sqlite)
+      
+      # WebLIMSStations needs no cleaning
+      
+      # Convert Date to character for db compatibility (must convert back to date whenever read in):
+      WebLIMSResults$DateSampled <- as.character(WebLIMSResults$DateSampled)
+      
+      # Additional data cleaning work:
+      WebLIMSResults <- WebLIMSResults %>%
+        mutate(
+          WebResult = as.character(WebResult),
+          WebResult = gsub("[^0-9.<>=]", "", WebResult),  # Remove any non-numeric characters except <, >, .
+          DL = case_when(
+            grepl("^>", WebResult) ~ ">DL",
+            grepl("^<", WebResult) ~ "<DL",
+            TRUE ~ "Measured value"
+          ),
+          WebResult = case_when(
+            grepl("^>", WebResult) ~ suppressWarnings(as.numeric(sub(">", "", WebResult))),
+            grepl("^<", WebResult) ~ suppressWarnings(as.numeric(sub("<", "", WebResult))) / 2,
+            TRUE ~ suppressWarnings(as.numeric(trimws(WebResult)))
+          ),
+          Qualifier = if_else(is.na(Qualifier) | Qualifier == "", "None", Qualifier), # Handle empty and NA values
+          RelativeDepthSample = if_else(is.na(trimws(RelativeDepthSample)) | trimws(RelativeDepthSample) == "",
+                                        "N/A",
+                                        toupper(trimws(RelativeDepthSample)))
+        ) %>%
+        filter(!is.na(WebResult)) %>%  # Remove rows where FinalResult is NA
+        mutate(across(c(Qualifier, RelativeDepthSample, DL), as.factor))
+      
+      # Create an ephemeral duckDB database for data
+      full_con <- dbConnect(duckdb::duckdb(), paste0(temp_dir, "/weblims_cyano.duckdb"))
+      # Saving R dataframes to a temp database:
+      dbWriteTable(full_con, "WebLIMSResults", WebLIMSResults, overwrite = TRUE)
+      dbWriteTable(full_con, "WebLIMSStations", WebLIMSStations, overwrite = TRUE)
+      dbDisconnect(full_con)
+      
+      database_file <- paste0(temp_dir, "/weblims_cyano.duckdb")
+     
+      
+    } else {
+      # Code here runs IF the SQL Server data grab SUCCEEDS:
+      # Fetch the date range from duckDB
+      full_con <- dbConnect(duckdb::duckdb(), database_file)
+
+      # Rename StationID to SamplingPoint to reduce errors:
+      dbExecute(full_con, "ALTER TABLE WebLIMSResults RENAME COLUMN StationID to SamplingPoint")
+
+      date_range <- dbGetQuery(full_con, "SELECT MIN(DateSampled) AS min_date, MAX(DateSampled) AS max_date FROM WebLIMSResults")
+      # FIX the leading/trailing spaces for duckDB here:
+      # Run update queries to trim spaces
+      dbExecute(full_con, "UPDATE WebLIMSResults SET SamplingPoint = TRIM(SamplingPoint);")
+      dbExecute(full_con, "UPDATE WebLIMSStations SET StationID = TRIM(StationID);")
+
+
+
+      dbDisconnect(full_con)
+
+      db_message <- paste("Using most recent version", "<br>", "of the database. Data available",
+                          "<br>", "between ", format(as.Date(date_range$min_date), "%m-%d-%Y"), " and ", format(as.Date(date_range$max_date), "%m-%d-%Y"))
+    }
+
+    runjs('document.getElementById("loading-overlay").style.display = "none";')  # Hide overlay after success
+
+    output$db_message <- renderUI({
+      HTML(db_message)
+    })
+    # Output is path to database file (full duckDB - see WebLIMS-data-visualizer app for backup db usage)
+    database_file
+  })
+
+  # Calling the fetch_data function (only happens once initially):
+  observeEvent(TRUE, {
+    db_file <- fetch_data()
+    database_path(db_file)
+  }, once = TRUE)
+
+  # Getting data for map:
+  cyan_data <- reactive({
+    req(input$toxinType)
+
+    database_file <- database_path()
+
+    con <- dbConnect(duckdb(), database_file)
+
+    query <- paste0(
+      "SELECT SamplingPoint, DateSampled, WebResult, Units, Qualifier, ",
+      "WebParameter, DL, RelativeDepthSample, WebLIMSStations.Description, WebLIMSStations.Latitude, WebLIMSStations.Longitude ",
+      "FROM WebLIMSResults ",
+      "LEFT JOIN WebLIMSStations ON WebLIMSResults.SamplingPoint = WebLIMSStations.StationID"#,
+      # "WHERE SamplingPoint = '", input$site, "' ",
+      # "AND WebParameter = '", input$parameter, "'"
+    )
+
+    raw_data <- dbGetQuery(con, query)
+    dbDisconnect(con)
+
+    # Filter based on toxin type (case-insensitive match)
+    filtered_data <- raw_data %>%
+      filter(grepl(input$toxinType, WebParameter, ignore.case = TRUE))
+
+    # Return filtered data object
+    filtered_data
+  })
+
+
+  ### Cyanotoxin map ###
+  output$cyanoMap <- renderLeaflet({
+    # Create base map with selected basemap
+    base_map <- leaflet() %>%
+      addProviderTiles("OpenStreetMap", group = "Street") %>%
+      addProviderTiles("USGS.USImagery", group = "Satellite") %>%
+      setView(lng = -92.3731, lat = 34.7465, zoom = 7) %>%  # Default to Arkansas
+      addLayersControl(
+        baseGroups = c("Street", "Satellite"),
+        position = "topleft",
+        options = layersControlOptions(collapsed = FALSE)
+      )
+
+
+    map_data <- cyan_data()
+
+     # Test with browser:
+    # browser()
+
+    # Add markers to the map from WebLIMSStations:
+    base_map <- base_map %>%
+      addCircleMarkers(
+        data = map_data,
+        lng = ~Longitude, lat = ~Latitude,
+        radius = 8,
+        stroke = TRUE,
+        weight = 3,
+        color = "#0DA5B5",
+        layerId = ~SamplingPoint, # ID to track site clicks
+        # color = ~ifelse(Status == "Active", "darkred", "darkblue"),
+        # fillColor = ~ifelse(Status == "Active", "red", "blue"),
+        # fillOpacity = 0.8,
+        popup = ~paste(
+          "<strong>Location:</strong>", Description,
+          "<br><strong>Site ID:</strong>", SamplingPoint
+        )
+      )
+
+  })
+
+  ### PLOTTING THE CLICKED SITE DATA ####
+
+  # Reactive to get clicked site:
+  clicked_site <- reactive({
+    req(input$cyanoMap_marker_click)
+    input$cyanoMap_marker_click$id
+  })
+
+  # Filtering data to clicked site:
+  site_data <- reactive({
+    req(clicked_site())
+    cyan_data() %>% filter(SamplingPoint == clicked_site()) %>%
+      mutate(DateSampled = as.Date(DateSampled))
+  })
+
+  # Placeholder text until user selects a site:
+  output$cyanoPlotUI <- renderUI({
+    if (is.null(input$cyanoMap_marker_click)) {
+      tags$div("Select a site to display data", style = "text-align:center;
+               color: #777; padding-top: 235px; padding-bottom: 235px; font-size: 20px;")
+    } else {
+      #girafeOutput("cyanoPlot", width = "100%", height = "100%")
+      tags$div(
+        style = "height: auto; width: 100%; max-width: 600px;",
+        girafeOutput("cyanoPlot", width = "100%", height = "auto")
+      )
+      
+    }
+  })
+
+  # PLOTTING:
+  output$cyanoPlot <- renderGirafe({
+    req(nrow(site_data()) > 0)
+
+    # Check if RelativeDepthSample has any non-NA values
+    use_size <- any(site_data()$RelativeDepthSample != "N/A")
+
+    p <- ggplot(site_data(), aes(x = DateSampled, y = WebResult,
+                                 tooltip = paste("Date:", format(DateSampled, "%Y-%m-%d"),
+                                                 "<br>Result:", WebResult,
+                                                 #"<br>Value:", DL, # weird display issue
+                                                 "<br>Qualifiers:", Qualifier,
+                                                 "<br>Relative Depth:", RelativeDepthSample))) +
+      geom_point_interactive(aes(color = Qualifier, shape = DL),
+                             alpha = 0.7,
+                             size = 2.5) +
+      scale_shape_manual(values = c("Measured value" = 16, "<DL" = 17, ">DL" = 17)) + # 16 = circle, 17 = triangle
+      theme_classic(base_size = 14) +
+      labs(
+        title = paste(input$toxinType, "levels at", clicked_site()),
+        x = "Date",
+        y = expression(paste("Result (", mu, "g/L)")),
+        color = "Qualifiers",
+        shape = "Values"
+      ) +
+      scale_x_date(date_labels = "%Y-%m-%d") +
+      theme( axis.text.x = element_text(angle = 45, hjust =1))
+
+    # Add size mapping only if RelativeDepthSample is not all NA
+    if (use_size) {
+      p <- p +
+        geom_point_interactive(aes(size = RelativeDepthSample, color = Qualifier, shape = DL), alpha = 0.7) +
+        # scale_shape_manual(values = c("Measured value" = 16, "<DL" = 17, ">DL" = 17)) +
+        scale_size_manual(values = c("EPILIMNION" = 2.5, "HYPOLIMNION" = 5.5,
+                                     "THERMOCLINE" = 4, "MID-DEPTH" = 4, "N/A" = 7),
+                          name = "Relative Depth",
+                          drop = TRUE)
+    }
+
+    girafe(ggobj = p)
+  })
+
+  # Table for toxin tab:
+  output$cyanoTable <- DT::renderDT ({
+    req(nrow(site_data()) > 0)
+
+    DT::datatable(site_data()[, c("SamplingPoint", "DateSampled","WebResult", "Units", "Qualifier", "WebParameter", "DL","RelativeDepthSample", "Description", "Latitude", "Longitude")],
+                  colnames = c("Site", "Date","Result", "Units", "Qualifier", "Parameter", "DL","Relative Depth", "Description", "Latitude", "Longitude"),
+                  extensions = 'Buttons',  # Enable buttons extension)
+    options = list(
+      pageLength = 10,
+      autoWidth = TRUE,
+      responsive = TRUE,
+      searching = FALSE  # Disable the search function
+    ),
+    rownames = FALSE)
+  })
+
+  # Handle data downloader for toxin table:
+  output$downloadCyanoData <- downloadHandler(
+    filename = function() {
+      paste0(clicked_site(), "_", input$toxinType, ".csv")
+    },
+    content = function(file) {
+      write.csv(site_data()[, c("SamplingPoint", "DateSampled", "WebResult", "Units", "Qualifier", "WebParameter", "DL", "RelativeDepthSample", "Description", "Latitude", "Longitude")],
+                file,
+                row.names = FALSE)
+    }
+  )
+
   
 }
 
